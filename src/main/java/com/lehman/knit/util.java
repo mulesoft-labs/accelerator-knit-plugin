@@ -113,7 +113,7 @@ public class util {
 	}
 
 	/**
-	 * Strips all newline characters and replaces with a space. If there are muptiple
+	 * Strips all newline characters and replaces with a space. If there are multiple
 	 * spaces in a row it also makes them a single space.
 	 * @param in is the String to fix.
 	 * @return A String with newline replaced.

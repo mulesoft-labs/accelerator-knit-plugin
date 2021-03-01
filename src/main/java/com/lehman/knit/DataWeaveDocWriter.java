@@ -22,20 +22,20 @@ import java.util.List;
 /**
  * The interface that models the Knit document writer.
  */
-public interface dwDocWriter {
+public interface DataWeaveDocWriter {
     /**
      * Writes a doc with the provided dwFile object.
      * @param file is a dwFile object to write.
      * @return A String with the document text.
      */
-    public String writeDoc(dwFile file);
+    public String writeDoc(DataWeaveFile file);
 
     /**
      * Writes a doc with the provided dwFile list.
      * @param files is a List of dwFile objects to write.
      * @return A String with the document text.
      */
-    public String writeDoc(List<dwFile> files);
+    public String writeDoc(List<DataWeaveFile> files);
 
     /**
      * Writes a doc with the provided dwFile list and moduleNameList.
@@ -44,7 +44,7 @@ public interface dwDocWriter {
      * be provided to specify the order of modules.
      * @return A String with the document text.
      */
-    public String writeDoc(List<dwFile> files, List<String> moduleNameList);
+    public String writeDoc(List<DataWeaveFile> files, List<String> moduleNameList);
 
     /**
      * Writes a header table with the provided dwFile list. This
@@ -52,7 +52,7 @@ public interface dwDocWriter {
      * @param files is a List of dwFile objects to write.
      * @return A String with the header table text.
      */
-    public String writeHeaderTable(List<dwFile> files);
+    public String writeHeaderTable(List<DataWeaveFile> files);
 
     /**
      * Writes a header table with the provided dwFile list. This
@@ -62,5 +62,5 @@ public interface dwDocWriter {
      * be provided to specify the order of modules.
      * @return A String with the header table text.
      */
-    public String writeHeaderTable(List<dwFile> files, List<String> moduleNameList);
+    public String writeHeaderTable(List<DataWeaveFile> files, List<String> moduleNameList);
 }

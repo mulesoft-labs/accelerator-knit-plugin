@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Class that models a DW comment annotation table.
  */
-public class annotationTable {
+public class AnnotationTable {
     /**
      * The column names for the table.
      */
@@ -32,7 +32,7 @@ public class annotationTable {
     /**
      * The rows of the table.
      */
-    private List<annotationRow> rows = new ArrayList<annotationRow>();
+    private List<AnnotationRow> rows = new ArrayList<AnnotationRow>();
 
     /**
      * Gets the list of columns of the table.
@@ -54,7 +54,7 @@ public class annotationTable {
      * Gets a List of annotationRow objects with the table rows.
      * @return A List of annotationRow objects.
      */
-    public List<annotationRow> getRows() {
+    public List<AnnotationRow> getRows() {
         return rows;
     }
 
@@ -62,7 +62,7 @@ public class annotationTable {
      * Sets the rows of the table.
      * @param rows is a List of annotationRow objects to set.
      */
-    public void setRows(List<annotationRow> rows) {
+    public void setRows(List<AnnotationRow> rows) {
         this.rows = rows;
     }
 }

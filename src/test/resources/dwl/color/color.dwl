@@ -1,14 +1,14 @@
 /**
- * This module supports color realted functions.
+ * This module supports color related functions.
  */
 
 %dw 2.0
 
 /**
  * Maps a color object to a result color object.
- * @p data is an input color object.
- * @r a result color object.
- * @tbl Target Field, Source Field, Comments
+ * @param data is an input color object.
+ * @return a result color object.
+ * @table Source Field, Target Field, Comments
  * @row name, data.color, The name\\, of the color.
  * @row type, data.category, The data category.
  * @row rgba, data.code.rgba, Mapped RGBA value.
@@ -24,8 +24,8 @@ fun mapColor (data) = {
 
 /**
  * Maps the provided RGBA array to a RGBA string.
- * @p rgba is an array with the 4 RGBA values.
- * @r A RGBA string.
+ * @param rgba is an array with the 4 RGBA values.
+ * @return A RGBA string.
  */
 fun mapRgba (rgba) =
 (if (!isEmpty(rgba))

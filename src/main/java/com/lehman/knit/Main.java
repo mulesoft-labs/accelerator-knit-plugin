@@ -48,8 +48,8 @@ public class Main extends AbstractMojo {
      * Maven config value generate.
      * Flag to run the doc parser/generator. This is the on/off switch for the maven plugin..
      */
-    @Parameter(property = "generate")
-    boolean generate = true;
+    @Parameter(property = "skip")
+    boolean skip = false;
 
     /**
      * Maven config value files.
@@ -63,14 +63,14 @@ public class Main extends AbstractMojo {
      * A list of DW directories to parse.
      */
     @Parameter(property = "directories")
-    String[] directories = new String[]{ "src/main/resources/dw" };
+    String[] directories = new String[]{ "src/main/resources/dwl" };
 
     /**
      * Maven config value singleOutputFile.
      * Flag to switch between files for each module and a single output file.
      */
-    @Parameter(property = "singleOutputFile")
-    boolean singleOutputFile = true;
+    @Parameter(property = "consolidateOutput")
+    boolean consolidateOutput = true;
 
     /**
      * Maven config value outputFile.
@@ -142,31 +142,13 @@ public class Main extends AbstractMojo {
     public void setModuleList(String[] ModuleList) { this.moduleList = ModuleList; }
 
     /**
-     * Main entry point of the application. This is currently just for testing.
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        //knitParser parser = new knitParser();
-        //dwFile f = parser.parseFile("dw/test.dw");
-
-        Main mn = new Main();
-        ArrayList<dwFile> parsedFiles = new ArrayList<dwFile>();
-        mn.parseDirectory("dw", parsedFiles);
-
-        dwDocWriter writer = new markdownDwDocWriterImpl();
-        String doc = writer.writeDoc(parsedFiles);
-        System.out.println(doc);
-    }
-
-    /**
      * Parses a DW directory with the provided arguments.
      * @param dirName is a String with the directory name.
      * @param parsedFiles is an ArrayList of dwFile objects to store the parsed results.
      * @throws Exception
      */
-    public void parseDirectory(String dirName, ArrayList<dwFile> parsedFiles) throws Exception {
-        knitParser parser = new knitParser();
+    public void parseDirectory(String dirName, ArrayList<DataWeaveFile> parsedFiles) throws Exception {
+        KnitParser parser = new KnitParser();
         File dir = new File(dirName);
         if (dir.exists()) {
             if (dir.isDirectory()) {
@@ -195,8 +177,8 @@ public class Main extends AbstractMojo {
         System.out.println("Running Knit doc generator ...");
 
         try {
-            if (this.generate) {
-                if (!this.singleOutputFile) {
+            if (this.skip) {
+                if (!this.consolidateOutput) {
                     System.err.println("Error: knit-maven-plugin <singleOutputFile> is set to false but only single file is currently implemented.");
                     System.exit(1);
                 }
@@ -211,7 +193,7 @@ public class Main extends AbstractMojo {
                 System.out.println("Info: knit-maven-plugin skipping doc generation. (generate=false)");
             }
         } catch (Exception e) {
-            System.err.println("Bad news, the knit plugin ran into trouble. If it continues please report it at https://github.com/rsv-code/knit.\n");
+            System.err.println("Bad news, the knit plugin ran into trouble. If it continues please report it at https://github.com/rsv-code/knit." + System.lineSeparator());
             e.printStackTrace();
         }
     }
@@ -220,7 +202,7 @@ public class Main extends AbstractMojo {
      * Writes the dataweave doc file.
      */
     private void writeDwFile() {
-        ArrayList<dwFile> parsedFiles = new ArrayList<dwFile>();
+        ArrayList<DataWeaveFile> parsedFiles = new ArrayList<DataWeaveFile>();
 
         try {
             // Parse directories
@@ -229,19 +211,18 @@ public class Main extends AbstractMojo {
             }
 
             // Parse files
-            knitParser parser = new knitParser();
+            KnitParser parser = new KnitParser();
             for (String fname : this.files) {
-                File f = new File(this.getWorkingDirectory() + "/" + fname);
                 parsedFiles.add(parser.parseFile(this.getWorkingDirectory(), fname, dwlFileExt));
             }
 
             // Create the doc writer and write the doc.
-            dwDocWriter writer = new markdownDwDocWriterImpl();
+            DataWeaveDocWriter writer = new MarkdownDataWeaveDocWriterImpl();
             String doc = "";
 
             // If header text is set.
-            if (!this.outputHeaderText.equals("")) {
-                doc += this.outputHeaderText + "\n\n";
+            if (!"".equals(this.outputHeaderText)) {
+                doc += this.outputHeaderText + System.lineSeparator() + System.lineSeparator();
             }
 
             // If write header table is set.
@@ -253,13 +234,13 @@ public class Main extends AbstractMojo {
             doc += writer.writeDoc(parsedFiles, Arrays.asList(this.moduleList));
 
             // If footer text is set.
-            if (!this.outputFooterText.equals("")) {
-                doc += this.outputFooterText + "\n\n";
+            if (!"".equals(this.outputFooterText)) {
+                doc += this.outputFooterText + System.lineSeparator() + System.lineSeparator();
             }
 
             // Output to file.
             util.write(
-                    this.getWorkingDirectory() + "/" +this.outputFile,
+                    this.getWorkingDirectory() + "/" + this.outputFile,
                     doc,
                     false
             );
@@ -292,22 +273,22 @@ public class Main extends AbstractMojo {
      */
     private void printAbout() {
         String out = "";
-        out += " __  __     __   __     __     ______      _____     ______     ______                            \n" +
-                "/\\ \\/ /    /\\ \"-.\\ \\   /\\ \\   /\\__  _\\    /\\  __-.  /\\  __ \\   /\\  ___\\                           \n" +
-                "\\ \\  _\"-.  \\ \\ \\-.  \\  \\ \\ \\  \\/_/\\ \\/    \\ \\ \\/\\ \\ \\ \\ \\/\\ \\  \\ \\ \\____                          \n" +
-                " \\ \\_\\ \\_\\  \\ \\_\\\\\"\\_\\  \\ \\_\\    \\ \\_\\     \\ \\____-  \\ \\_____\\  \\ \\_____\\                         \n" +
-                "  \\/_/\\/_/   \\/_/ \\/_/   \\/_/     \\/_/      \\/____/   \\/_____/   \\/_____/                         \n" +
-                "                                                                                                  \n" +
-                " ______     ______     __   __     ______     ______     ______     ______   ______     ______    \n" +
-                "/\\  ___\\   /\\  ___\\   /\\ \"-.\\ \\   /\\  ___\\   /\\  == \\   /\\  __ \\   /\\__  _\\ /\\  __ \\   /\\  == \\   \n" +
-                "\\ \\ \\__ \\  \\ \\  __\\   \\ \\ \\-.  \\  \\ \\  __\\   \\ \\  __<   \\ \\  __ \\  \\/_/\\ \\/ \\ \\ \\/\\ \\  \\ \\  __<   \n" +
-                " \\ \\_____\\  \\ \\_____\\  \\ \\_\\\\\"\\_\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\ \\_\\    \\ \\_\\  \\ \\_____\\  \\ \\_\\ \\_\\ \n" +
-                "  \\/_____/   \\/_____/   \\/_/ \\/_/   \\/_____/   \\/_/ /_/   \\/_/\\/_/     \\/_/   \\/_____/   \\/_/ /_/ \n" +
-                "                                                                                                  \n";
-        out += "Knit 1.0.10 - DataWeave Document Generator\n";
-        out += "Written By Austin Lehman\n";
-        out += "austin@rosevillecode.com\n";
-        out += "Copyright 2020 Roseville Code Inc.\n";
+        out += " __  __     __   __     __     ______      _____     ______     ______                            " + System.lineSeparator() +
+                "/\\ \\/ /    /\\ \"-.\\ \\   /\\ \\   /\\__  _\\    /\\  __-.  /\\  __ \\   /\\  ___\\                           " + System.lineSeparator() +
+                "\\ \\  _\"-.  \\ \\ \\-.  \\  \\ \\ \\  \\/_/\\ \\/    \\ \\ \\/\\ \\ \\ \\ \\/\\ \\  \\ \\ \\____                          " + System.lineSeparator() +
+                " \\ \\_\\ \\_\\  \\ \\_\\\\\"\\_\\  \\ \\_\\    \\ \\_\\     \\ \\____-  \\ \\_____\\  \\ \\_____\\                         " + System.lineSeparator() +
+                "  \\/_/\\/_/   \\/_/ \\/_/   \\/_/     \\/_/      \\/____/   \\/_____/   \\/_____/                         " + System.lineSeparator() +
+                "                                                                                                  " + System.lineSeparator() +
+                " ______     ______     __   __     ______     ______     ______     ______   ______     ______    " + System.lineSeparator() +
+                "/\\  ___\\   /\\  ___\\   /\\ \"-.\\ \\   /\\  ___\\   /\\  == \\   /\\  __ \\   /\\__  _\\ /\\  __ \\   /\\  == \\   " + System.lineSeparator() +
+                "\\ \\ \\__ \\  \\ \\  __\\   \\ \\ \\-.  \\  \\ \\  __\\   \\ \\  __<   \\ \\  __ \\  \\/_/\\ \\/ \\ \\ \\/\\ \\  \\ \\  __<   " + System.lineSeparator() +
+                " \\ \\_____\\  \\ \\_____\\  \\ \\_\\\\\"\\_\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\ \\_\\    \\ \\_\\  \\ \\_____\\  \\ \\_\\ \\_\\ " + System.lineSeparator() +
+                "  \\/_____/   \\/_____/   \\/_/ \\/_/   \\/_____/   \\/_/ /_/   \\/_/\\/_/     \\/_/   \\/_____/   \\/_/ /_/ " + System.lineSeparator() +
+                "                                                                                                  " + System.lineSeparator();
+        out += "Knit 1.0.10 - DataWeave Document Generator" + System.lineSeparator();
+        out += "Written By Austin Lehman" + System.lineSeparator();
+        out += "austin@rosevillecode.com" + System.lineSeparator();
+        out += "Copyright 2020 Roseville Code Inc." + System.lineSeparator();
         System.out.println(out);
     }
 }

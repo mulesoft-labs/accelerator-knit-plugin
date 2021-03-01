@@ -25,11 +25,11 @@ import java.util.regex.Pattern;
 /**
  * Knit parser class implements the DW parser functionality.
  */
-public class knitParser {
+public class KnitParser {
     /**
      * Default constructor.
      */
-    public knitParser() {}
+    public KnitParser() {}
 
     /**
      * Parses a DW file with the provided root directory name and file name
@@ -40,8 +40,8 @@ public class knitParser {
      * @return A dwParse object.
      * @throws IOException
      */
-    public dwFile parseFile(String rootDirName, String fileName, String dwlFileExt) throws IOException {
-        dwFile ret = new dwFile(fileName.replaceFirst(rootDirName, ""), dwlFileExt);
+    public DataWeaveFile parseFile(String rootDirName, String fileName, String dwlFileExt) throws IOException {
+        DataWeaveFile ret = new DataWeaveFile(fileName.replaceFirst(rootDirName, ""), dwlFileExt);
         String fileStr = util.read(fileName);
         this.parseModuleComment(fileStr, ret);
         ret.setVariables(this.parseVariables(fileStr));
@@ -55,7 +55,7 @@ public class knitParser {
      * @param text is a String with the file contents.
      * @param ret is the return dwFile object to set the comment information in.
      */
-    private void parseModuleComment(String text, dwFile ret) {
+    private void parseModuleComment(String text, DataWeaveFile ret) {
         // Get the module section.
         String funPatternStr = "(\\/\\*\\*(.+?)\\*\\/\\s*%dw)";
         Pattern r = Pattern.compile(funPatternStr, Pattern.DOTALL | Pattern.MULTILINE);
@@ -73,8 +73,8 @@ public class knitParser {
      * @param text is a String with the file text.
      * @return An ArrayList of dwFunction objects with the function list.
      */
-    private ArrayList<dwFunction> parseFunctions(String text) {
-        ArrayList<dwFunction> ret = new ArrayList<dwFunction>();
+    private ArrayList<DataWeaveFunction> parseFunctions(String text) {
+        ArrayList<DataWeaveFunction> ret = new ArrayList<DataWeaveFunction>();
 
         // Get functions sections.
         String funPatternStr = "(\\/\\*\\*[^\\/]+?\\*\\/\\s*fun\\s*\\w*\\s*\\(.*?\\))";
@@ -95,8 +95,8 @@ public class knitParser {
      * @param functionString is a String with the function text.
      * @return A dwFunction object with the result.
      */
-    private dwFunction parseFunctionString(String functionString) {
-        dwFunction funct = new dwFunction();
+    private DataWeaveFunction parseFunctionString(String functionString) {
+        DataWeaveFunction funct = new DataWeaveFunction();
 
         String funPatternStr = "\\/\\*\\*(.+?)\\*\\/\\s*fun\\s*(\\w*)\\s*\\((.*?)\\)";
         Pattern r = Pattern.compile(funPatternStr, Pattern.DOTALL | Pattern.MULTILINE);
@@ -121,8 +121,8 @@ public class knitParser {
     private String parseCommentString(String str) {
         String ret = "";
 
-        for (String line : str.toString().split("\n")) {
-            ret += line.replaceFirst("^\\s\\*\\s?", "") + "\n";
+        for (String line : str.toString().split(System.lineSeparator())) {
+            ret += line.replaceFirst("^\\s\\*\\s?", "") + System.lineSeparator();
         }
 
         return ret;
@@ -133,8 +133,8 @@ public class knitParser {
      * @param str is the comment string to parse.
      * @return A dwComment object with the result.
      */
-    private dwComment parseComment(String str) {
-        dwComment comment = new dwComment();
+    private DataWeaveComment parseComment(String str) {
+        DataWeaveComment comment = new DataWeaveComment();
 
         String pstr = "(.*?)(^@.*)";
 
@@ -156,16 +156,16 @@ public class knitParser {
      * @param str is a comment string to parse.
      * @return An ArrayList of dwCommentAnnotation objects.
      */
-    private ArrayList<dwCommentAnnotation> parseAnnotations(String str) {
-        ArrayList<dwCommentAnnotation> ret = new ArrayList<dwCommentAnnotation>();
+    private ArrayList<DataWeaveCommentAnnotation> parseAnnotations(String str) {
+        ArrayList<DataWeaveCommentAnnotation> ret = new ArrayList<DataWeaveCommentAnnotation>();
         String pstr = "^@(\\w+)\\s(.*?(?=@))";
         Pattern r = Pattern.compile(pstr, Pattern.DOTALL | Pattern.MULTILINE);
-        Matcher m = r.matcher(str + "\n@");
+        Matcher m = r.matcher(str + System.lineSeparator() + "@");
         while (m.find()) {
-            dwCommentAnnotation ann = new dwCommentAnnotation();
+            DataWeaveCommentAnnotation ann = new DataWeaveCommentAnnotation();
             ann.setName(m.group(1).toString());
             String kvStr = m.group(2).toString();
-            if (ann.getName().equals("p")) {
+            if (ann.getName().equals("param")) {
                 this.parseAnnotationValue(kvStr, ann);
             } else {
                 ann.setValue(kvStr);
@@ -181,7 +181,7 @@ public class knitParser {
      * @param str is a String with the annotation text.
      * @param ann is a dwCommentAnnotation object to update.
      */
-    private void parseAnnotationValue(String str, dwCommentAnnotation ann) {
+    private void parseAnnotationValue(String str, DataWeaveCommentAnnotation ann) {
         String pstr = "(\\w+)\\s(.*)";
         Pattern r = Pattern.compile(pstr, Pattern.DOTALL | Pattern.MULTILINE);
         Matcher m = r.matcher(str);
@@ -197,11 +197,11 @@ public class knitParser {
      * @param str is a String with the arguments to parse.
      * @return An ArrayList of dwArgument objects with the result.
      */
-    private ArrayList<dwArgument> parseArguments(String str) {
-        ArrayList<dwArgument> args = new ArrayList<dwArgument>();
+    private ArrayList<DataWeaveArgument> parseArguments(String str) {
+        ArrayList<DataWeaveArgument> args = new ArrayList<DataWeaveArgument>();
         String parts[] = str.split(",");
         for(String part : parts) {
-            dwArgument arg = new dwArgument();
+            DataWeaveArgument arg = new DataWeaveArgument();
             if (part.contains(":")) {
                 String argParts[] = part.split(":");
 
@@ -221,8 +221,8 @@ public class knitParser {
      * @param text is a String with the file text.
      * @return An ArrayList of dwVariable objects.
      */
-    private ArrayList<dwVariable> parseVariables(String text) {
-        ArrayList<dwVariable> variables = new ArrayList<dwVariable>();
+    private ArrayList<DataWeaveVariable> parseVariables(String text) {
+        ArrayList<DataWeaveVariable> variables = new ArrayList<DataWeaveVariable>();
 
         // Get functions sections.
         String funPatternStr = "(\\/\\*\\*[^\\/]+?\\*\\/\\s*var\\s*\\w*)";
@@ -242,8 +242,8 @@ public class knitParser {
      * @param variableString is a String with the variable text.
      * @return A dwVariable object with the result.
      */
-    private dwVariable parseVariableString(String variableString) {
-        dwVariable var = new dwVariable();
+    private DataWeaveVariable parseVariableString(String variableString) {
+        DataWeaveVariable var = new DataWeaveVariable();
 
         String varPatternStr = "\\/\\*\\*(.+?)\\*\\/\\s*var\\s*(\\w*)";
         Pattern r = Pattern.compile(varPatternStr, Pattern.DOTALL | Pattern.MULTILINE);
@@ -263,18 +263,18 @@ public class knitParser {
      * @param comment is a dwComment object to search.
      * @return An annotationTable object if found or null if not.
      */
-    private annotationTable parseAnnotationTable(dwComment comment) {
-        annotationTable tbl = null;
+    private AnnotationTable parseAnnotationTable(DataWeaveComment comment) {
+        AnnotationTable tbl = null;
 
         // Look for the table definition
-        for (dwCommentAnnotation ann : comment.getAnnotations()) {
-            if (ann.getName().toLowerCase().equals("tbl")) {
-                tbl = new annotationTable();
+        for (DataWeaveCommentAnnotation ann : comment.getAnnotations()) {
+            if (ann.getName().toLowerCase().equals("table")) {
+                tbl = new AnnotationTable();
 
                 ArrayList<String> cols = new ArrayList<String>();
 
                 for (String col : util.fromArray(ann.getValue().split("(?<!\\\\\\\\),"))) {
-                    cols.add(col.replaceAll("\n", ""));
+                    cols.add(col.replaceAll(System.lineSeparator(), ""));
                 }
 
                 tbl.setColumns(cols);
@@ -284,15 +284,15 @@ public class knitParser {
 
         // Look for rows now.
         if (tbl != null) {
-            ArrayList<annotationRow> rows = new ArrayList<annotationRow>();
-            for (dwCommentAnnotation ann : comment.getAnnotations()) {
+            ArrayList<AnnotationRow> rows = new ArrayList<AnnotationRow>();
+            for (DataWeaveCommentAnnotation ann : comment.getAnnotations()) {
                 if (ann.getName().toLowerCase().equals("row")) {
-                    annotationRow row = new annotationRow();
+                    AnnotationRow row = new AnnotationRow();
 
                     ArrayList<String> fields = new ArrayList<String>();
                     for (String str : ann.getValue().split("(?<!\\\\\\\\),")) {
                         // Replace escaped commas.
-                        fields.add(str.replaceAll("\\\\\\\\,", ",").replaceAll("\n", ""));
+                        fields.add(str.replaceAll("\\\\\\\\,", ",").replaceAll(System.lineSeparator(), ""));
                     }
 
                     row.setFields(fields);
