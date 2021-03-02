@@ -34,7 +34,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
     @Override
     public String writeDoc(DataWeaveFile file) {
         String ret = "# " + file.name + System.lineSeparator();
-        ret += "###### " + util.join("::", file.modulePath) + System.lineSeparator();
+        ret += "###### " + Utility.join("::", file.modulePath) + System.lineSeparator();
         if (!file.getComment().getText().equals("")) {
             ret += file.getComment().getText() + System.lineSeparator();
         }
@@ -126,7 +126,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         for (String modName : moduleNameList) {
             DataWeaveFile modFile = this.getFileByModuleName(files, modName);
             if (modFile != null) {
-                ret += "| [" + modFile.getName() + "](#" + modFile.getName() + ") | " + util.stripNewLines(modFile.getComment().getText()) + " |" + System.lineSeparator();
+                ret += "| [" + modFile.getName() + "](#" + modFile.getName() + ") | " + Utility.stripNewLines(modFile.getComment().getText()) + " |" + System.lineSeparator();
             } else {
                 System.err.println("Warning: Module name '" + modName + "' was supplied in moduleNameList but was not found parsed file list.");
             }
@@ -135,7 +135,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         // Iterate the rest.
         for (DataWeaveFile dwf : files) {
             if (!moduleNameList.contains(dwf.getName())) {
-                ret += "| [" + dwf.getName() + "](#" + dwf.getName() + ") | " + util.stripNewLines(dwf.getComment().getText()) + " |" + System.lineSeparator();
+                ret += "| [" + dwf.getName() + "](#" + dwf.getName() + ") | " + Utility.stripNewLines(dwf.getComment().getText()) + " |" + System.lineSeparator();
             }
         }
 
@@ -184,7 +184,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         for(DataWeaveFunction fun : file.getFunctions()) {
             ret += "__fun__ `" + fun.getName() + "` ( " + this.writeFunctArgs(fun) + ")" + System.lineSeparator() + System.lineSeparator();
             ret += this.writeFunctAnnotations(fun) + System.lineSeparator();
-            ret += "> " + util.stripNewLines(fun.getComment().getText()) + System.lineSeparator() + System.lineSeparator();
+            ret += "> " + Utility.stripNewLines(fun.getComment().getText()) + System.lineSeparator();
             if (fun.getTable() != null) {
                 ret += writeAnnotationTable(fun.getTable()) + System.lineSeparator() + System.lineSeparator();
             }
@@ -229,12 +229,12 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
             if (ann.getName().toLowerCase().equals("return")) {
                 retAnn = ann;
             } else if (ann.getName().toLowerCase().equals("param")) {
-                ret += "__param__ `" + ann.getKey() + "` " + util.stripNewLines(ann.getValue()) + "  " + System.lineSeparator();
+                ret += "__param__ `" + ann.getKey() + "` " + Utility.stripNewLines(ann.getValue()) + "  " + System.lineSeparator();
             }
         }
 
         if (retAnn != null) {
-            ret += "__return__ " + util.stripNewLines(retAnn.getValue()) + "  " + System.lineSeparator();
+            ret += "__return__ " + Utility.stripNewLines(retAnn.getValue()) + "  " + System.lineSeparator();
         }
 
         if (!ret.equals("")) {
@@ -251,7 +251,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
      */
     private String writeAnnotationTable(AnnotationTable tbl) {
         String ret = "";
-        ret += "> | " + util.join(" | ", tbl.getColumns()) + " | " + System.lineSeparator();
+        ret += "> | " + Utility.join(" | ", tbl.getColumns()) + " | " + System.lineSeparator();
         // divider
         ret += "> | ";
         for (int i = 0; i < tbl.getColumns().size(); i++) {
@@ -259,7 +259,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         }
         ret += System.lineSeparator();
         for (AnnotationRow row : tbl.getRows()) {
-            ret += "> | " + util.join(" | ", row.getFields()) + " | " + System.lineSeparator();
+            ret += "> | " + Utility.join(" | ", row.getFields()) + " | " + System.lineSeparator();
         }
         return ret;
     }

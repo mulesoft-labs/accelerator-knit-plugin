@@ -42,7 +42,7 @@ public class KnitParser {
      */
     public DataWeaveFile parseFile(String rootDirName, String fileName, String dwlFileExt) throws IOException {
         DataWeaveFile ret = new DataWeaveFile(fileName.replaceFirst(rootDirName, ""), dwlFileExt);
-        String fileStr = util.read(fileName);
+        String fileStr = Utility.read(fileName);
         this.parseModuleComment(fileStr, ret);
         ret.setVariables(this.parseVariables(fileStr));
         ret.setFunctions(this.parseFunctions(fileStr));
@@ -273,7 +273,7 @@ public class KnitParser {
 
                 ArrayList<String> cols = new ArrayList<String>();
 
-                for (String col : util.fromArray(ann.getValue().split("(?<!\\\\\\\\),"))) {
+                for (String col : Utility.fromArray(ann.getValue().split("(?<!\\\\\\\\),"))) {
                     cols.add(col.replaceAll(System.lineSeparator(), ""));
                 }
 

@@ -81,7 +81,7 @@ public class DataWeaveFile {
         this.name = fileName.substring(0, fileName.length()-(dwlFileExt.length() + 1));
         String pathStr = FileNameAndPath.substring(0, FileNameAndPath.length() - (dwlFileExt.length() + 1));
         String sepPattern = Pattern.quote("/");
-        this.modulePath = util.fromArray(pathStr.split(sepPattern));
+        this.modulePath = Utility.fromArray(pathStr.split(sepPattern));
     }
 
     /**
@@ -225,7 +225,7 @@ public class DataWeaveFile {
         String rstr = "";
         rstr += "fileName: " + this.fileName + System.lineSeparator();
         rstr += "fileNameAndPath: " + this.fileNameAndPath + System.lineSeparator();
-        rstr += "modulePath: " + util.join("::", this.modulePath) + System.lineSeparator();
+        rstr += "modulePath: " + Utility.join("::", this.modulePath) + System.lineSeparator();
         return rstr;
     }
 }

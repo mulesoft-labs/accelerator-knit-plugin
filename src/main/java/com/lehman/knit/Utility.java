@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * This class provides utility functions.
  */
-public class util {
+public class Utility {
 
 	/**
 	 * Joins a list of strings provided using the provided delimiter into a single string.

@@ -22,10 +22,10 @@
 
     <developers>
         <developer>
-            <email>austin@rosevillecode.com</email>
-            <name>Austin Lehman</name>
-            <url>https://github.com/rsv-code</url>
-            <id>rsv-code</id>
+            <email>solutions@mulesoft.com</email>
+            <name>MuleSoft Solutions</name>
+            <url>hhttps://github.com/mulesoft-labs/accelerator-knit-plugin</url>
+            <id>mulesoft-labs</id>
         </developer>
     </developers>
 
@@ -54,11 +54,6 @@
             <version>2.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.3</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
@@ -67,11 +62,11 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id></id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id></id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>

@@ -33,20 +33,20 @@ import java.util.Arrays;
 /**
  * The main entry point class implements the normal main
  * function as well as the Mojo execute function for
- * maven plugin support.
+ * Maven plugin support.
  */
 @Mojo(name = "knit", defaultPhase = LifecyclePhase.PACKAGE)
 public class Main extends AbstractMojo {
     /**
      * This isn't used but there in case it's needed later. It provides
-     * the maven project information to the execute() function.
+     * the Maven project information to the execute() function.
      */
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
 
     /**
-     * Maven config value generate.
-     * Flag to run the doc parser/generator. This is the on/off switch for the maven plugin..
+     * Maven config value skip.
+     * Flag to run the doc parser/generator. This is the on/off switch for the Maven plugin..
      */
     @Parameter(property = "skip")
     boolean skip = false;
@@ -66,7 +66,7 @@ public class Main extends AbstractMojo {
     String[] directories = new String[]{ "src/main/resources/dwl" };
 
     /**
-     * Maven config value singleOutputFile.
+     * Maven config value consolidateOutput.
      * Flag to switch between files for each module and a single output file.
      */
     @Parameter(property = "consolidateOutput")
@@ -95,7 +95,6 @@ public class Main extends AbstractMojo {
     @Parameter(property = "outputFooterText")
     String outputFooterText = "";
 
-
     /**
      * Maven config value writeHeaderTable.
      * If set to true this will write a table towards
@@ -106,7 +105,7 @@ public class Main extends AbstractMojo {
     boolean writeHeaderTable = false;
 
     /**
-     * Maven config value headerTableModuleList.
+     * Maven config value moduleList.
      * If writeHeaderTable is set to true then this list
      * can be provided to provide the specified order of modules
      * in the header table.
@@ -116,11 +115,18 @@ public class Main extends AbstractMojo {
 
     /**
      * Maven config value dwlFileExt.
-     * This provides the ability to define dataweave files
+     * This provides the ability to define DataWeave files
      * with different file extensions. The default is dwl.
      */
     @Parameter(property = "dwlFileExt")
     String dwlFileExt = "dwl";
+
+    /**
+     * Maven config value showAbout.
+     * Flag to print program information when run.
+     */
+    @Parameter(property = "showAbout")
+    boolean showAbout = false;
 
     /**
      * Accessor to set the directories. So as to not overwrite the initial value, this checks
@@ -170,14 +176,16 @@ public class Main extends AbstractMojo {
     }
 
     /**
-     * The entry point of the maven plugin.
+     * The entry point of the Maven plugin.
      */
     public void execute() {
-        this.printAbout();
-        System.out.println("Running Knit doc generator ...");
+    	if( this.showAbout ) {
+    		this.printAbout();
+    	}
 
+    	System.out.println("Running Knit doc generator ...");
         try {
-            if (this.skip) {
+            if (!this.skip) {
                 if (!this.consolidateOutput) {
                     System.err.println("Error: knit-maven-plugin <singleOutputFile> is set to false but only single file is currently implemented.");
                     System.exit(1);
@@ -190,7 +198,7 @@ public class Main extends AbstractMojo {
                     System.exit(1);
                 }
             } else {
-                System.out.println("Info: knit-maven-plugin skipping doc generation. (generate=false)");
+                System.out.println("Info: knit-maven-plugin skipping doc generation. (skip=true)");
             }
         } catch (Exception e) {
             System.err.println("Bad news, the knit plugin ran into trouble. If it continues please report it at https://github.com/rsv-code/knit." + System.lineSeparator());
@@ -239,7 +247,7 @@ public class Main extends AbstractMojo {
             }
 
             // Output to file.
-            util.write(
+            Utility.write(
                     this.getWorkingDirectory() + "/" + this.outputFile,
                     doc,
                     false

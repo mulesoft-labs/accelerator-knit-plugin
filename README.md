@@ -4,30 +4,30 @@
 
 ![Knit Intro](knit-intro.png)
 
-Written by Austin Lehman
+Original source written by Austin Lehman
 
 Knit is a Maven plugin that generates documentation from source code 
 comments in DataWeave files. 
 
-Here's how it works. You write comments like this in your dwl files.
+Here's how it works. You write comments like this in your dwl files:
 
 ```
 /**
  * Maps a color object to a result color object.
- * @p data is an input color object.
- * @r a result color object.
+ * @param data is an input color object.
+ * @return a result color object.
  */
 fun mapColor(data) = {
 ...
 ```
  
-Then you add the plugin to your pom like this.
+You add the plugin to your pom like this:
 
 ```
 <plugin>
-    <groupId>io.github.rsv-code</groupId>
+    <groupId>org.mule.tools.maven</groupId>
     <artifactId>knit-maven-plugin</artifactId>
-    <version>1.0.10</version>
+    <version>2.0.0</version>
     <executions>
         <execution>
             <goals>
@@ -42,22 +42,20 @@ Then when you build your project it will generate a knit-doc.md file in the
 target directory. It's that simple.
 
 # Dependencies
-Knit requires JDK 8 or later. It may work on previous versions but you will 
-need to update the pom.xml in that case. It also requires maven of course.
 
+Knit requires JDK 8 or later. It may work on previous versions but you will 
+need to update the pom.xml in that case. It also requires Maven, of course.
 
 # Usage
 
 Since this is a Maven plugin all you have to do is reference it in the 
-pom.xml of the project you want to use it in. [The plugin exists in Maven 
-Central Repository](https://search.maven.org/artifact/io.github.rsv-code/knit-maven-plugin) 
-so adding this with the latest version to the pom is all that's needed.
+pom.xml of the project you want to use it in.
 
 ```
 <plugin>
-    <groupId>io.github.rsv-code</groupId>
+    <groupId>org.mule.tools.maven</groupId>
     <artifactId>knit-maven-plugin</artifactId>
-    <version>1.0.10</version>
+    <version>2.0.0</version>
     <executions>
         <execution>
             <goals>
@@ -69,12 +67,12 @@ so adding this with the latest version to the pom is all that's needed.
         <!-- Generate docs ... run the plugin? -->
         <generate>true</generate>
         
-        <!-- Make a single output file. -->
-        <singleOutputFile>true</singleOutputFile>
+        <!-- Make a single output file. Default is to create separate files. -->
+        <consolidateOutput>true</consolidateOutput>
         
-        <!-- Direcories to look for files to parse. By default src/main/resources/dw is set by the plugin.
+        <!-- Direcories to look for files to parse. By default src/main/resources/dwl is set by the plugin.
         <directories>
-            <dir>src/main/resources/dw</dir>
+            <dir>src/main/resources/dwl</dir>
         </directories>
         -->
         
@@ -122,16 +120,16 @@ This app is for testing the knit maven plugin.
 The configuration section is optional, if not specified it will use 
 the default values which should work for most cases.
 
-- **generate** - A flag to run or not to run the Knit doc generator. Set 
-  to false if you want it to skip generation.
+- **skip** - A flag to run or not to run the Knit doc generator. Set 
+  to true if you want it to skip generation.
 - **singleOutputFile** - A flag to specify if it should generate a single 
-  output file or a file for each module. Currently only single output file 
+  output file or a file for each module. Currently only a single output file 
   is supported.
 - **directories** - A list of directories to look for .dwl files. If not 
-  specified it will look in rc/main/resources/dw. If specified it will look 
+  specified it will look in src/main/resources/dwl. If specified it will look 
   at just those directories you set.
 - **files** - A list of files parse.
-- **outputFile** - A string with the output file to write to. By deafult this 
+- **outputFile** - A string with the output file to write to. By default this 
   writes to target/knit-doc.md.
 - **outputHeaderText** - Text to be set at the very begining of the generated 
   doc. This is optional and exists to allow some custom introduction content 
@@ -147,34 +145,47 @@ the default values which should work for most cases.
   allows you to specify the order that modules will be written.
 - **dwlFileExt** - A String with the file extension for DataWeave files. The default 
 is dwl. This needs to be set if your DataWeave files have a different file extension.
+- **showAbout** - A flag to specify whether program information is output upon
+execution. Default is false.
 
-## Generating The Doc
-Knit is executed from the maven package lifecycle phase. In studio certain conditions 
-will cause it to run maven package. To trigger the build, do the following.
-From the command line in your project dictory (where the pom is) run something like 
-this to generate the doc. 
+## Generating the documentation
+
+Knit is executed from the maven package lifecycle phase. In Anypoint Studio, 
+certain conditions will cause it to run the Maven package goal automatically. 
+To manually trigger the build from the command line, run the following command
+from your project dictory (where the pom.xml file is): 
+
 ```
 mvn clean package
 ```
 
 # Comments
 
-There are 3 comment blocks that can be used to generate docs and they are 
-module, variable, and function.
+There are several types of comment blocks, which can be used to generate docs:
 
-Module level documentation is set at the very begining of the module before 
-the %dw declaration and starting with /** like this.
+- module
+- variable
+- function
+- table
+
+## Module comments
+
+Module level documentation is set at the very begining of the module, before 
+the %dw declaration, and starting with /** like this.
 ```
 /**
- * This module supports color realted functions.
+ * This module supports color related functions.
  */
 
 %dw 2.0
 ...
 ```
 
+## Variable comments
+
 Variable documentation is implemented by writing a comment block above the 
 variable declaration.
+
 ```
 /**
  * First name of the author.
@@ -182,29 +193,34 @@ variable declaration.
 var first = "Austin"
 ```
 
-Finally, documentation of a function is accomplished by writing a comment block 
+## Function comments
+
+Documentation of a function is accomplished by writing a comment block 
 above the function. In function comments you can set annotations to define 
-parameters and return values by using @p and @r respectively. 
+parameters and return values by using the tags @param and @return, respectively. 
+
 ```
 /**
  * Maps a color object to a result color object.
- * @p data is an input color object.
- * @r a result color object.
+ * @param data is an input color object.
+ * @return a result color object.
  */
 fun mapColor(data) = {
 ...
 ```
 
-As of version 1.0.8 you can also specify a mapping table. Here's the general syntax. 
-Columns and fields are separated by commas and you can escape a comma with two back 
+## Table comments
+
+You can also specify a data mapping table for transformations. Here's the general syntax. 
+Columns and fields are separated by commas, and you can escape a comma with two back 
 slashes like this '\\,'.
 
 ```
 /**
  * Maps a PIM DB object to a result Product object.
- * @p product is an input DB Product object.
- * @r a result Product object.
- * @tbl Product Object, Database field, Description
+ * @param product is an input DB Product object.
+ * @return a result Product object.
+ * @table Product object, Database field, Description
  * @row productId, product.PRODUCT_ID,  The id of the product\\, a new ID.
  * @row productType,product.product_type, to indicate master or project or variant
  * @row masterProductId, product.master_product_id, The id of the associated master product
@@ -215,17 +231,17 @@ fun transformProduct(product) = {
 ...
 ```
 
-The @tbl is set with the comma separated column names and then the @row annotations 
-then follow in order with each row of the table.
+The @table is set with the comma separated column names, and then the @row annotations 
+follow in order with each row of the table.
 
 # Installing Locally
 
 Normally you should just be able to add the plugin to your pom and away you go. In 
 the event that you want to builld and install from source, here's how it's done. 
-To install the plugin locally just clone the repo and then install with maven.
+To install the plugin locally, just clone the repo and then install with maven.
 ```
-$ git clone git@github.com:rsv-code/knit.git
-$ cd knit
+$ git clone https://github.com/mulesoft-labs/accelerator-knit-plugin.git
+$ cd accelerator-knit-plugin
 $ mvn clean install -Dgpg.skip
 ```
 
@@ -233,6 +249,7 @@ Done and done, that's all you need to use in your project. Just add it to
 the pom.xml and you're golden.
 
 # License
+
 Copyright 2020 Roseville Code Inc. (austin@rosevillecode.com)
 
 This program is free software: you can redistribute it and/or modify
