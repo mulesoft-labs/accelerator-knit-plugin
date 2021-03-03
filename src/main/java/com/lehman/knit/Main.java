@@ -74,7 +74,7 @@ public class Main extends AbstractMojo {
 
     /**
      * Maven config value outputFile.
-     * The output file to write to when singleOutputFile == true.
+     * The output file to write to when consolidateOutput == true.
      */
     @Parameter(property = "outputFile")
     String outputFile = "target/knit-doc.md";
@@ -187,7 +187,7 @@ public class Main extends AbstractMojo {
         try {
             if (!this.skip) {
                 if (!this.consolidateOutput) {
-                    System.err.println("Error: knit-maven-plugin <singleOutputFile> is set to false but only single file is currently implemented.");
+                    System.err.println("Error: knit-maven-plugin <consolidateOutput> is set to false but only single file is currently implemented.");
                     System.exit(1);
                 }
 

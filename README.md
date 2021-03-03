@@ -122,7 +122,7 @@ the default values which should work for most cases.
 
 - **skip** - A flag to run or not to run the Knit doc generator. Set 
   to true if you want it to skip generation.
-- **singleOutputFile** - A flag to specify if it should generate a single 
+- **consolidateOutput** - A flag to specify if it should generate a single 
   output file or a file for each module. Currently only a single output file 
   is supported.
 - **directories** - A list of directories to look for .dwl files. If not 
