@@ -34,7 +34,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
     @Override
     public String writeDoc(DataWeaveFile file) {
         String ret = "# " + file.name + System.lineSeparator();
-        ret += "###### " + Utility.join("::", file.modulePath) + System.lineSeparator();
+        //ret += "###### " + Utility.join("::", file.modulePath) + System.lineSeparator();
         if (!file.getComment().getText().equals("")) {
             ret += file.getComment().getText() + System.lineSeparator();
         }
@@ -42,14 +42,20 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
 
         String vars = this.writeVariables(file);
         if (!vars.equals("")) {
-            ret += "### Variables" + System.lineSeparator();
+            ret += "## Variables" + System.lineSeparator() + System.lineSeparator();
             ret += vars + System.lineSeparator();
         }
 
         String functs = this.writeFunctions(file);
         if (!functs.equals("")) {
-            ret += "### Functions" + System.lineSeparator();
+            ret += "## Functions" + System.lineSeparator() + System.lineSeparator();
             ret += functs + System.lineSeparator();
+        }
+
+        String tables = this.writeTables(file);
+        if (!tables.equals("")) {
+            ret += "## Mapping Tables" + System.lineSeparator() + System.lineSeparator();
+            ret += tables + System.lineSeparator();
         }
 
         return ret;
@@ -90,7 +96,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         // Iterate the rest.
         for (DataWeaveFile dwf : files) {
             if (!moduleNameList.contains(dwf.getName())) {
-                ret += this.writeDoc(dwf) + System.lineSeparator();
+                ret += this.writeDoc(dwf);
             }
         }
 
@@ -166,14 +172,14 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
 
         for(DataWeaveVariable var : file.getVariables()) {
             ret += "__var__ `" + var.getName() + "`" + System.lineSeparator();
-            ret += "> " + var.getComment().getText().replaceAll(System.lineSeparator(), "  " + System.lineSeparator()) + System.lineSeparator() + System.lineSeparator();
+            ret += "> " + var.getComment().getText().replaceAll(System.lineSeparator(), "  " + System.lineSeparator()) + System.lineSeparator();
         }
 
         return ret;
     }
 
     /**
-     * Writes teh functions section with the provided dwFile
+     * Writes the functions section with the provided dwFile
      * object.
      * @param file is the dwObject file to write functions for.
      * @return A String with the functions section.
@@ -186,7 +192,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
             ret += this.writeFunctAnnotations(fun) + System.lineSeparator();
             ret += "> " + Utility.stripNewLines(fun.getComment().getText()) + System.lineSeparator();
             if (fun.getTable() != null) {
-                ret += writeAnnotationTable(fun.getTable()) + System.lineSeparator() + System.lineSeparator();
+                ret += writeAnnotationTable(fun.getTable()) + System.lineSeparator();
             }
         }
 
@@ -245,6 +251,23 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
     }
 
     /**
+     * Writes the mappings table section with the provided dwFile
+     * object.
+     * @param file is the dwObject file to write tables for.
+     * @return A String with the tables section.
+     */
+    private String writeTables(DataWeaveFile file) {
+        String ret = "";
+
+        for(DataWeaveTable table : file.getTables()) {
+            ret += Utility.stripNewLines(table.getComment().getText()) + System.lineSeparator() + System.lineSeparator();
+        	ret += writeAnnotationTable(table.getTable()) + System.lineSeparator();
+        }
+
+        return ret;
+    }
+
+    /**
      * Writes the annotation table to string.
      * @param tbl is an annotationTable object to write.
      * @return A String with the annotation table.
@@ -255,7 +278,7 @@ public class MarkdownDataWeaveDocWriterImpl implements DataWeaveDocWriter {
         // divider
         ret += "> | ";
         for (int i = 0; i < tbl.getColumns().size(); i++) {
-            ret += "-|";
+            ret += "---- |";
         }
         ret += System.lineSeparator();
         for (AnnotationRow row : tbl.getRows()) {

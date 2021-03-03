@@ -243,7 +243,7 @@ public class Main extends AbstractMojo {
 
             // If footer text is set.
             if (!"".equals(this.outputFooterText)) {
-                doc += this.outputFooterText + System.lineSeparator() + System.lineSeparator();
+                doc += this.outputFooterText + System.lineSeparator();
             }
 
             // Output to file.

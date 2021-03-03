@@ -36,7 +36,7 @@ public class KnitParser {
      * and returns the parsed dwFile object.
      * @param rootDirName is a String with the root directory of the file to parse.
      * @param fileName is a String with the file name to parse.
-     * @param dwlFileExt is a String with the dataweave file extension. (Default dwl)
+     * @param dwlFileExt is a String with the DataWeave file extension. (Default dwl)
      * @return A dwParse object.
      * @throws IOException
      */
@@ -46,6 +46,7 @@ public class KnitParser {
         this.parseModuleComment(fileStr, ret);
         ret.setVariables(this.parseVariables(fileStr));
         ret.setFunctions(this.parseFunctions(fileStr));
+        ret.setTables(this.parseTables(fileStr));
         return ret;
     }
 
@@ -113,6 +114,44 @@ public class KnitParser {
     }
 
     /**
+     * Parses the remaining mapping tables and returns an
+     * array of mapping table objects with the results.
+     * @param text is a String with the file text.
+     * @return An ArrayList of DataWeave Table objects with the mapping tables.
+     */
+    private ArrayList<DataWeaveTable> parseTables(String text) {
+        ArrayList<DataWeaveTable> ret = new ArrayList<DataWeaveTable>();
+
+        // Skip to the main body of the script; if no body then nothing to parse
+        int bodyIdx = text.indexOf("---");
+        if(bodyIdx >= 0) {
+	        String bodyStr = text.substring(bodyIdx + 3);
+	        String tablePatternStr = "\\/\\*\\*([^\\/]+?)\\*\\/";
+	        Pattern r = Pattern.compile(tablePatternStr, Pattern.DOTALL | Pattern.MULTILINE);
+	        Matcher m = r.matcher(bodyStr);
+	        while (m.find()) {
+	            ret.add(this.parseTableString(m.group(1).toString()));
+	        }
+        }
+        return ret;
+    }
+
+    /**
+     * Parses each individual mapping table comment and returns a DataWeaveTable
+     * object with the result.
+     * @param tableString is a String with the mapping table text.
+     * @return A DataWeaveTable object with the result.
+     */
+    private DataWeaveTable parseTableString(String tableString) {
+        DataWeaveTable table = new DataWeaveTable();
+
+        table.setCommentString(this.parseCommentString(tableString).trim());
+        table.setComment(this.parseComment(table.getCommentString()));
+        table.setTable(this.parseAnnotationTable(table.getComment()));
+        return table;
+    }
+
+    /**
      * Processes the provided comment block line by line replacing any space
      * and * characters preceding the text.
      * @param str is a comment block to process.
@@ -122,7 +161,7 @@ public class KnitParser {
         String ret = "";
 
         for (String line : str.toString().split(System.lineSeparator())) {
-            ret += line.replaceFirst("^\\s\\*\\s?", "") + System.lineSeparator();
+            ret += line.replaceFirst("^\\s*\\*\\s*", "") + System.lineSeparator();
         }
 
         return ret;

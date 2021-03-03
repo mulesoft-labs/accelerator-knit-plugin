@@ -66,6 +66,11 @@ public class DataWeaveFile {
     public ArrayList<DataWeaveVariable> variables = new ArrayList<DataWeaveVariable>();
 
     /**
+     * List of module/file mapping tables.
+     */
+    public ArrayList<DataWeaveTable> tables = new ArrayList<DataWeaveTable>();
+
+    /**
      * Default constructor.
      */
     public DataWeaveFile() { }
@@ -73,7 +78,7 @@ public class DataWeaveFile {
     /**
      * Constructor with provided file name and path.
      * @param FileNameAndPath is a String with the file name and path.
-     * @param dwlFileExt is a String with the dataweave file extension. (Default dwl)
+     * @param dwlFileExt is a String with the DataWeave file extension; default is dwl
      */
     public DataWeaveFile(String FileNameAndPath, String dwlFileExt) {
         this.fileNameAndPath = FileNameAndPath;
@@ -214,6 +219,22 @@ public class DataWeaveFile {
      */
     public void setVariables(ArrayList<DataWeaveVariable> variables) {
         this.variables = variables;
+    }
+
+    /**
+     * Gets the list of tables of this module/file.
+     * @return An ArrayList of mapping tables in this module.
+     */
+    public ArrayList<DataWeaveTable> getTables() {
+        return tables;
+    }
+
+    /**
+     * Sets the list of functions of this module/file.
+     * @param functions is an ArrayList of dwTable objects to set.
+     */
+    public void setTables(ArrayList<DataWeaveTable> tables) {
+        this.tables = tables;
     }
 
     /**
