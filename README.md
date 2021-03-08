@@ -65,7 +65,7 @@ pom.xml of the project you want to use it in.
     </executions>
     <configuration>
         <!-- Generate docs ... run the plugin? -->
-        <generate>true</generate>
+        <skip>false</skip>
         
         <!-- Make a single output file. Default is to create separate files. -->
         <consolidateOutput>true</consolidateOutput>
@@ -211,15 +211,15 @@ fun mapColor(data) = {
 
 ## Table comments
 
-You can also specify a data mapping table for transformations. Here's the general syntax. 
+You can also specify a data mapping table for transformations. Mapping table 
+directives can be added to function comments, or included in the main script
+body (i.e., after the '---' separator) where needed. Here's the general syntax. 
 Columns and fields are separated by commas, and you can escape a comma with two back 
 slashes like this '\\,'.
 
 ```
 /**
  * Maps a PIM DB object to a result Product object.
- * @param product is an input DB Product object.
- * @return a result Product object.
  * @table Product object, Database field, Description
  * @row productId, product.PRODUCT_ID,  The id of the product\\, a new ID.
  * @row productType,product.product_type, to indicate master or project or variant
