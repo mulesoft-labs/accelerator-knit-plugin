@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.mule.tools.maven</groupId>
+    <groupId>997d5e99-287f-4f68-bc95-ed435d7c5797</groupId>
     <artifactId>knit-maven-plugin</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <packaging>maven-plugin</packaging>
 
     <name>knit-maven-plugin</name>
@@ -24,7 +24,7 @@
         <developer>
             <email>solutions@mulesoft.com</email>
             <name>MuleSoft Solutions</name>
-            <url>hhttps://github.com/mulesoft-labs/accelerator-knit-plugin</url>
+            <url>https://github.com/mulesoft-labs/accelerator-knit-plugin</url>
             <id>mulesoft-labs</id>
         </developer>
     </developers>
@@ -98,7 +98,7 @@
                 <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId></serverId>
+                    <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>

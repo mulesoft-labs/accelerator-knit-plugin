@@ -25,7 +25,7 @@ You add the plugin to your pom like this:
 
 ```
 <plugin>
-    <groupId>org.mule.tools.maven</groupId>
+    <groupId>997d5e99-287f-4f68-bc95-ed435d7c5797</groupId>
     <artifactId>knit-maven-plugin</artifactId>
     <version>2.0.0</version>
     <executions>
@@ -53,9 +53,9 @@ pom.xml of the project you want to use it in.
 
 ```
 <plugin>
-    <groupId>org.mule.tools.maven</groupId>
+    <groupId>997d5e99-287f-4f68-bc95-ed435d7c5797</groupId>
     <artifactId>knit-maven-plugin</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.2</version>
     <executions>
         <execution>
             <goals>

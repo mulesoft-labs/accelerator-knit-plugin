@@ -1,0 +1,3 @@
+#!/bin/sh
+echo Cleaning and installing the plugin...
+call mvn clean install -Dgpg.skip
