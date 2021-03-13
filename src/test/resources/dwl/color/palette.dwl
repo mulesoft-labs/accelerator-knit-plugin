@@ -9,8 +9,8 @@ import mapColor from dw::color::color
 /**
  * Map palette maps the provided colors object and returns 
  * a myColors object with the mapped result.
- * @p data is a colors object.
- * @r a myColors object.
+ * @param data is a colors object.
+ * @return a myColors object.
  */
 fun mapPalette (data) = {
     myColors: data.colors map (item, index) -> mapColor(item)

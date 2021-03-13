@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Class models a comment.
  */
-public class dwComment {
+public class DataWeaveComment {
     /**
      * The text of the comment.
      */
@@ -31,7 +31,7 @@ public class dwComment {
     /**
      * A list of dwCommentAnnotation objects that are the annotations.
      */
-    private ArrayList<dwCommentAnnotation> annotations = new ArrayList<dwCommentAnnotation>();
+    private ArrayList<DataWeaveCommentAnnotation> annotations = new ArrayList<DataWeaveCommentAnnotation>();
 
     /**
      * Gets the comment text.
@@ -53,7 +53,7 @@ public class dwComment {
      * Gets a list of the annotations for the comment.
      * @return An ArrayList of dwCommentAnnotation objects with the annotations.
      */
-    public ArrayList<dwCommentAnnotation> getAnnotations() {
+    public ArrayList<DataWeaveCommentAnnotation> getAnnotations() {
         return annotations;
     }
 
@@ -61,7 +61,7 @@ public class dwComment {
      * Sets the annotations.
      * @param annotations is an ArrayList of dwCommentAnnotation objects to set.
      */
-    public void setAnnotations(ArrayList<dwCommentAnnotation> annotations) {
+    public void setAnnotations(ArrayList<DataWeaveCommentAnnotation> annotations) {
         this.annotations = annotations;
     }
 }

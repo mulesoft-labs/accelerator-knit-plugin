@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * Class models a dataweave file.
  */
-public class dwFile {
+public class DataWeaveFile {
     /**
      * The DW file name. (myModule)
      */
@@ -53,35 +53,40 @@ public class dwFile {
     /**
      * The module/file comment as a dwComment object.
      */
-    private dwComment comment = new dwComment();
+    private DataWeaveComment comment = new DataWeaveComment();
 
     /**
      * List of module/file functions.
      */
-    public ArrayList<dwFunction> functions = new ArrayList<dwFunction>();
+    public ArrayList<DataWeaveFunction> functions = new ArrayList<DataWeaveFunction>();
 
     /**
      * List of module/file variables.
      */
-    public ArrayList<dwVariable> variables = new ArrayList<dwVariable>();
+    public ArrayList<DataWeaveVariable> variables = new ArrayList<DataWeaveVariable>();
+
+    /**
+     * List of module/file mapping tables.
+     */
+    public ArrayList<DataWeaveTable> tables = new ArrayList<DataWeaveTable>();
 
     /**
      * Default constructor.
      */
-    public dwFile() { }
+    public DataWeaveFile() { }
 
     /**
      * Constructor with provided file name and path.
      * @param FileNameAndPath is a String with the file name and path.
-     * @param dwlFileExt is a String with the dataweave file extension. (Default dwl)
+     * @param dwlFileExt is a String with the DataWeave file extension; default is dwl
      */
-    public dwFile(String FileNameAndPath, String dwlFileExt) {
+    public DataWeaveFile(String FileNameAndPath, String dwlFileExt) {
         this.fileNameAndPath = FileNameAndPath;
         this.fileName = (new File(FileNameAndPath)).getName();
         this.name = fileName.substring(0, fileName.length()-(dwlFileExt.length() + 1));
         String pathStr = FileNameAndPath.substring(0, FileNameAndPath.length() - (dwlFileExt.length() + 1));
         String sepPattern = Pattern.quote("/");
-        this.modulePath = util.fromArray(pathStr.split(sepPattern));
+        this.modulePath = Utility.fromArray(pathStr.split(sepPattern));
     }
 
     /**
@@ -172,7 +177,7 @@ public class dwFile {
      * Gets the module comment object.
      * @return A dwComment object.
      */
-    public dwComment getComment() {
+    public DataWeaveComment getComment() {
         return comment;
     }
 
@@ -180,7 +185,7 @@ public class dwFile {
      * Sets the module comment object.
      * @param comment is a dwComment object of the module.
      */
-    public void setComment(dwComment comment) {
+    public void setComment(DataWeaveComment comment) {
         this.comment = comment;
     }
 
@@ -188,7 +193,7 @@ public class dwFile {
      * Gets the list of functions of this module/file.
      * @return An ArrayList of dwFunction objects with the functions of this module.
      */
-    public ArrayList<dwFunction> getFunctions() {
+    public ArrayList<DataWeaveFunction> getFunctions() {
         return functions;
     }
 
@@ -196,7 +201,7 @@ public class dwFile {
      * Sets the list of functions of this module/file.
      * @param functions is an ArrayList of dwFunction objects to set.
      */
-    public void setFunctions(ArrayList<dwFunction> functions) {
+    public void setFunctions(ArrayList<DataWeaveFunction> functions) {
         this.functions = functions;
     }
 
@@ -204,7 +209,7 @@ public class dwFile {
      * Gets a list of variables of the module/file.
      * @return An ArrayList of dwVariable objects of the module.
      */
-    public ArrayList<dwVariable> getVariables() {
+    public ArrayList<DataWeaveVariable> getVariables() {
         return variables;
     }
 
@@ -212,8 +217,24 @@ public class dwFile {
      * Sets a list of variables of the module/file.
      * @param variables is an ArrayList of dwVariable objects of the module.
      */
-    public void setVariables(ArrayList<dwVariable> variables) {
+    public void setVariables(ArrayList<DataWeaveVariable> variables) {
         this.variables = variables;
+    }
+
+    /**
+     * Gets the list of tables of this module/file.
+     * @return An ArrayList of mapping tables in this module.
+     */
+    public ArrayList<DataWeaveTable> getTables() {
+        return tables;
+    }
+
+    /**
+     * Sets the list of functions of this module/file.
+     * @param functions is an ArrayList of dwTable objects to set.
+     */
+    public void setTables(ArrayList<DataWeaveTable> tables) {
+        this.tables = tables;
     }
 
     /**
@@ -223,9 +244,9 @@ public class dwFile {
     @Override
     public String toString() {
         String rstr = "";
-        rstr += "fileName: " + this.fileName + "\n";
-        rstr += "fileNameAndPath: " + this.fileNameAndPath + "\n";
-        rstr += "modulePath: " + util.join("::", this.modulePath) + "\n";
+        rstr += "fileName: " + this.fileName + System.lineSeparator();
+        rstr += "fileNameAndPath: " + this.fileNameAndPath + System.lineSeparator();
+        rstr += "modulePath: " + Utility.join("::", this.modulePath) + System.lineSeparator();
         return rstr;
     }
 }

@@ -20,9 +20,9 @@ package com.lehman.knit;
 /**
  * Class models a dataweave variable.
  */
-public class dwVariable {
+public class DataWeaveVariable {
     private String commentString = "";
-    private dwComment comment = new dwComment();
+    private DataWeaveComment comment = new DataWeaveComment();
     private String name = "";
 
     /**
@@ -45,7 +45,7 @@ public class dwVariable {
      * Gets the comment object of the variable.
      * @return A dwComment object of the variable.
      */
-    public dwComment getComment() {
+    public DataWeaveComment getComment() {
         return comment;
     }
 
@@ -53,7 +53,7 @@ public class dwVariable {
      * Sets the comment object of the variable.
      * @param comment is a dwComment object to set for the variable.
      */
-    public void setComment(dwComment comment) {
+    public void setComment(DataWeaveComment comment) {
         this.comment = comment;
     }
 

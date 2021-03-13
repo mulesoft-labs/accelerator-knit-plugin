@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Class models a dataweave function.
  */
-public class dwFunction {
+public class DataWeaveFunction {
     /**
      * The comment string.
      */
@@ -31,7 +31,7 @@ public class dwFunction {
     /**
      * The comment object.
      */
-    private dwComment comment = new dwComment();
+    private DataWeaveComment comment = new DataWeaveComment();
 
     /**
      * The function name.
@@ -41,12 +41,12 @@ public class dwFunction {
     /**
      * The argument list.
      */
-    private ArrayList<dwArgument> arguments = new ArrayList<dwArgument>();
+    private ArrayList<DataWeaveArgument> arguments = new ArrayList<DataWeaveArgument>();
 
     /**
      * Annotation table if set.
      */
-    private annotationTable table = null;
+    private AnnotationTable table = null;
 
     /**
      * Gets the comment string of the function.
@@ -68,7 +68,7 @@ public class dwFunction {
      * Gets the comment object of the function.
      * @return A dwComment object with the function comment.
      */
-    public dwComment getComment() {
+    public DataWeaveComment getComment() {
         return comment;
     }
 
@@ -76,7 +76,7 @@ public class dwFunction {
      * Sets the comment object of the function.
      * @param comment is a dwComment object to set for the function.
      */
-    public void setComment(dwComment comment) {
+    public void setComment(DataWeaveComment comment) {
         this.comment = comment;
     }
 
@@ -100,7 +100,7 @@ public class dwFunction {
      * Gets the argument list.
      * @return An ArrayList of dwArgument objects with the argument list.
      */
-    public ArrayList<dwArgument> getArguments() {
+    public ArrayList<DataWeaveArgument> getArguments() {
         return arguments;
     }
 
@@ -108,7 +108,7 @@ public class dwFunction {
      * Sets the argument list.
      * @param arguments is an ArrayList of dwArguments to set as the argument list.
      */
-    public void setArguments(ArrayList<dwArgument> arguments) {
+    public void setArguments(ArrayList<DataWeaveArgument> arguments) {
         this.arguments = arguments;
     }
 
@@ -116,7 +116,7 @@ public class dwFunction {
      * Gets the annotation table.
      * @return An annotationTable object if set or null if not.
      */
-    public annotationTable getTable() {
+    public AnnotationTable getTable() {
         return table;
     }
 
@@ -124,7 +124,7 @@ public class dwFunction {
      * Sets the annotation table.
      * @param table is an annotationTable object to set.
      */
-    public void setTable(annotationTable table) {
+    public void setTable(AnnotationTable table) {
         this.table = table;
     }
 }

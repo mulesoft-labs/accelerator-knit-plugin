@@ -4,14 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.rsv-code</groupId>
+    <groupId>org.mule.tools.maven</groupId>
     <artifactId>knit-maven-plugin</artifactId>
-    <version>1.0.10</version>
+    <version>2.0.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>knit-maven-plugin</name>
     <description>Maven plugin that turns DataWeave source code comments into documents.</description>
-    <url>https://github.com/rsv-code/knit</url>
 
     <licenses>
         <license>
@@ -21,27 +20,18 @@
         </license>
     </licenses>
 
-    <issueManagement>
-        <url>https://github.com/rsv-code/knit/issues</url>
-        <system>GitHub Issues</system>
-    </issueManagement>
-
-    <scm>
-        <url>https://github.com/rsv-code/knit</url>
-        <connection>scm:git:git://github.com:rsv-code/knit.git</connection>
-        <developerConnection>scm:git:git@github.com:rsv-code/knit.git</developerConnection>
-    </scm>
-
     <developers>
         <developer>
-            <email>austin@rosevillecode.com</email>
-            <name>Austin Lehman</name>
-            <url>https://github.com/rsv-code</url>
-            <id>rsv-code</id>
+            <email>solutions@mulesoft.com</email>
+            <name>MuleSoft Solutions</name>
+            <url>hhttps://github.com/mulesoft-labs/accelerator-knit-plugin</url>
+            <id>mulesoft-labs</id>
         </developer>
     </developers>
 
     <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -64,11 +54,6 @@
             <version>2.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.3</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
@@ -88,7 +73,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
@@ -114,7 +98,7 @@
                 <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
+                    <serverId></serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
@@ -135,7 +119,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

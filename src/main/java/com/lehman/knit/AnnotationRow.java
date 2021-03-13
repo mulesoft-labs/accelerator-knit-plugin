@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Class that models a DW comment annotation table row.
  */
-public class annotationRow {
+public class AnnotationRow {
     /**
      * A list of strings with the fields of a row.
      */

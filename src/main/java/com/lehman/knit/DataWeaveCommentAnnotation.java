@@ -20,7 +20,7 @@ package com.lehman.knit;
 /**
  * Class models a comment annotation.
  */
-public class dwCommentAnnotation {
+public class DataWeaveCommentAnnotation {
     private String name = "";
     private String key = "";
     private String value = "";

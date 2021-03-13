@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * This class provides utility functions.
  */
-public class util {
+public class Utility {
 
 	/**
 	 * Joins a list of strings provided using the provided delimiter into a single string.
@@ -113,7 +113,7 @@ public class util {
 	}
 
 	/**
-	 * Strips all newline characters and replaces with a space. If there are muptiple
+	 * Strips all newline characters and replaces with a space. If there are multiple
 	 * spaces in a row it also makes them a single space.
 	 * @param in is the String to fix.
 	 * @return A String with newline replaced.
